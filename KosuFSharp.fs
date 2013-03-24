@@ -21,18 +21,18 @@ module Helpers =
 
 module BrickSprites =
     open Helpers
-    let setupSprite(brick : Brick) =
+    let brickW, brickH = 100, 100
+    let setupSprite(uix, vix)(brick : Brick) =
         let uvDim = 1.0f / 16.0f
-        let uix, vix = Helpers.randInt(8), Helpers.randInt(8)
         let tcr = new TexCoordRect(float32(uix) * uvDim, (float32(uix)+1.0f) * uvDim, float32(vix) * uvDim, (float32(vix)+1.0f) * uvDim)
         let x = int(brick.pos.X)
         let y = int(brick.pos.Y)
-        let rect = new Drawing.Rectangle(x, y, 100, 100)
+        let rect = new Drawing.Rectangle(x, y, brickW, brickH)
         new TranslatedSprite(tcr, rect)
     let initBrickDirs(numBricks) =
         [for i in 1 .. numBricks do yield randDir()]
     let initBrickPositions(numBricks) =
-        [for i in 1 .. numBricks do yield randPos(Globals.ScrW, Globals.ScrH)]
+        [for i in 1 .. numBricks do yield randPos(Globals.ScrW-brickW, Globals.ScrH-brickH)]
 
 module Program =    
     let mutable geomCache : GeometryCache = null
@@ -47,7 +47,7 @@ module Program =
     let updateBrickPositions() =
         sb.Clear()
         bricks
-        |> List.map BrickSprites.setupSprite
+        |> List.map(BrickSprites.setupSprite(3, 3))
         |> List.iter(fun spr -> sb.AddSpr(spr))
 
     let create() =
@@ -69,8 +69,21 @@ module Program =
         updateCircle()
         ()
 
+    let flipHoriz(vec : Vector2) = new Vector2(vec.X * -1.0f, vec.Y)
+    let flipVert(vec : Vector2) = new Vector2(vec.X, vec.Y * -1.0f)
+
+    let keepInScrHoriz(brick) =
+        if brick.pos.X + float32(BrickSprites.brickW) > float32(Globals.ScrW) || brick.pos.X < 0.0f then { pos = brick.pos; dir = flipHoriz(brick.dir) }
+        else brick
+
+    let keepInScrVert(brick) =
+        if brick.pos.Y + float32(BrickSprites.brickH) > float32(Globals.ScrH) || brick.pos.Y < 0.0f then { pos = brick.pos; dir = flipVert(brick.dir) }
+        else brick
+
+    let keepInScr(brick) = brick |> keepInScrHoriz |> keepInScrVert
+
     let draw(delta) =
-        bricks <- List.map(fun brick -> { pos=brick.pos+brick.dir; dir=brick.dir }) bricks
+        bricks <- List.map(fun brick -> keepInScr({ pos=brick.pos+brick.dir; dir=brick.dir })) bricks
         updateBrickPositions()
         Utils.ClearScr()
         geomCache.Render()
