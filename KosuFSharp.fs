@@ -7,7 +7,10 @@ open Kosu.Rendering
 open Kosu.Rendering.Sprites
 open Kosu.Cameras
 
-type Brick = { pos : Vector2; dir : Vector2 }
+[<Struct>]
+type Brick(p : Vector2, d : Vector2) = 
+    member this.pos = p
+    member this.dir = d
 
 module Helpers =
     let rgen = new Random()
@@ -61,7 +64,7 @@ module Program =
         let brickPositions = BrickSprites.initBrickPositions(numBricks)
         let brickDirections = BrickSprites.initBrickDirs(numBricks)
         for i in 0 .. numBricks-1 do
-            bricks <- { pos=brickPositions.[i]; dir=brickDirections.[i] } :: bricks
+            bricks <- new Brick(brickPositions.[i], brickDirections.[i]) :: bricks
 
         updateBrickPositions()
 
@@ -72,18 +75,20 @@ module Program =
     let flipHoriz(vec : Vector2) = new Vector2(vec.X * -1.0f, vec.Y)
     let flipVert(vec : Vector2) = new Vector2(vec.X, vec.Y * -1.0f)
 
-    let keepInScrHoriz(brick) =
-        if brick.pos.X + float32(BrickSprites.brickW) > float32(Globals.ScrW) || brick.pos.X < 0.0f then { pos = brick.pos; dir = flipHoriz(brick.dir) }
+    let keepInScrHoriz(brick : Brick) =
+        if brick.pos.X + float32(BrickSprites.brickW) > float32(Globals.ScrW) || brick.pos.X < 0.0f then
+            new Brick(brick.pos, flipHoriz(brick.dir))
         else brick
 
-    let keepInScrVert(brick) =
-        if brick.pos.Y + float32(BrickSprites.brickH) > float32(Globals.ScrH) || brick.pos.Y < 0.0f then { pos = brick.pos; dir = flipVert(brick.dir) }
+    let keepInScrVert(brick : Brick) =
+        if brick.pos.Y + float32(BrickSprites.brickH) > float32(Globals.ScrH) || brick.pos.Y < 0.0f then
+            new Brick(brick.pos, flipVert(brick.dir))
         else brick
 
     let keepInScr(brick) = brick |> keepInScrHoriz |> keepInScrVert
 
     let draw(delta) =
-        bricks <- List.map(fun brick -> keepInScr({ pos=brick.pos+brick.dir; dir=brick.dir })) bricks
+        bricks <- List.map(fun (brick : Brick) -> keepInScr(new Brick(brick.pos+brick.dir, brick.dir))) bricks
         updateBrickPositions()
         Utils.ClearScr()
         geomCache.Render()
