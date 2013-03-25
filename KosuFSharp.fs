@@ -21,13 +21,15 @@ module Helpers =
         new Vector2(MathUtils.Cosf(alpha), MathUtils.Sinf(alpha))
     let randPos(maxX, maxY) =
         new Vector2(float32(rgen.Next(maxX)), float32(rgen.Next(maxY)))
+    let cellToTcr(uix, vix) =
+        let uvDim = 1.0f / 16.0f
+        new TexCoordRect(float32(uix) * uvDim, (float32(uix)+1.0f) * uvDim, float32(vix) * uvDim, (float32(vix)+1.0f) * uvDim)
 
 module BrickSprites =
     open Helpers
     let brickW, brickH = 100, 100
     let setupSprite(uix, vix)(brick : Brick) =
-        let uvDim = 1.0f / 16.0f
-        let tcr = new TexCoordRect(float32(uix) * uvDim, (float32(uix)+1.0f) * uvDim, float32(vix) * uvDim, (float32(vix)+1.0f) * uvDim)
+        let tcr = cellToTcr(uix, vix)
         let x = int(brick.pos.X)
         let y = int(brick.pos.Y)
         let rect = new Drawing.Rectangle(x, y, brickW, brickH)
@@ -91,8 +93,8 @@ module Program =
         bricks <- List.map(fun (brick : Brick) -> keepInScr(new Brick(brick.pos+brick.dir, brick.dir))) bricks
         updateBrickPositions()
         Utils.ClearScr()
-        geomCache.Render()
         sb.Render()
+        geomCache.Render()
     
     let move dx dy =
         let movSpeed = 10.0f
