@@ -44,7 +44,10 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')" />
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="KosuFSharp.fs" />
+    <Compile Include="Helpers.fs" />
+    <Compile Include="BrickSprites.fs" />
+    <Compile Include="MyGame.fs" />
+    <Compile Include="Launcher.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -58,8 +61,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Kosu\Kosu.csproj">
       <Name>Kosu</Name>
       <Project>{8c30fff3-fb86-4dd9-9f1c-9e24c972d543}</Project>

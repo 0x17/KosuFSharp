@@ -9,6 +9,15 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>KosuFSharpMac</RootNamespace>
     <AssemblyName>KosuFSharpMac</AssemblyName>
+    <BuildOrder>
+      <BuildOrder>
+        <String>AssemblyInfo.fs</String>
+        <String>Helpers.fs</String>
+        <String>BrickSprites.fs</String>
+        <String>MyGame.fs</String>
+        <String>Launcher.fs</String>
+      </BuildOrder>
+    </BuildOrder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,7 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="KosuFSharp.fs" />
+    <Compile Include="Helpers.fs" />
+    <Compile Include="Launcher.fs" />
+    <Compile Include="MyGame.fs" />
+    <Compile Include="BrickSprites.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
