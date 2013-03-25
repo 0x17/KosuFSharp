@@ -38,12 +38,17 @@ module BrickSprites =
         [for i in 1 .. numBricks do yield randDir()]
     let initBrickPositions(numBricks) =
         [for i in 1 .. numBricks do yield randPos(Globals.ScrW-brickW, Globals.ScrH-brickH)]
+    let initBricks(numBricks) =
+        let brickPositions = initBrickPositions(numBricks)
+        let brickDirections = initBrickDirs(numBricks)
+        List.init numBricks (fun i -> new Brick(brickPositions.[i], brickDirections.[i]))
 
 module Program =    
     let mutable geomCache : GeometryCache = null
     let mutable sb : SpriteCache = null
     let mutable position = Vector2(320.0f, 240.0f)
-    let mutable bricks : Brick list = []    
+    let numBricks = 128
+    let mutable bricks = BrickSprites.initBricks(numBricks)
 
     let updateCircle() =
         geomCache.Clear()
@@ -62,11 +67,6 @@ module Program =
         orthoCam.Apply()          
         
         sb <- new SpriteCache("texmap.png", false, true)
-        let numBricks = 128
-        let brickPositions = BrickSprites.initBrickPositions(numBricks)
-        let brickDirections = BrickSprites.initBrickDirs(numBricks)
-        for i in 0 .. numBricks-1 do
-            bricks <- new Brick(brickPositions.[i], brickDirections.[i]) :: bricks
 
         updateBrickPositions()
 
