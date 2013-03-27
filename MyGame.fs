@@ -32,7 +32,7 @@ module MyGame =
         Utils.SetupGlState()
 
         let orthoCam = OrthoCamera()
-        orthoCam.Apply()          
+        orthoCam.Apply()
         
         sb <- new SpriteCache("texmap.png", false, true)
 
@@ -83,6 +83,12 @@ module MyGame =
             move 0.0f -1.0f
         if keyDevice.[Key.Down] then
             move 0.0f 1.0f
+
+    let mouseInput (tx : int) (ty : int) (dx : int) (dy : int) (mbtns : MouseBtns) (delta : int64) =
+        if mbtns.Lmb then
+            position.X <- float32(tx)
+            position.Y <- float32(ty)
+            updateCircle ()
     
     let dispose () =
         geomCache.Dispose()
@@ -92,6 +98,7 @@ module MyGame =
     cbacks.Create <- Action(create)
     cbacks.Draw <- Action<_>(draw)
     cbacks.KeyInput <- Action<_,_>(keyInput)
+    cbacks.MouseInput <- Action<_,_,_,_,_,_>(mouseInput)
     cbacks.Dispose <- Action(dispose)
     
     type MyState(stateMgr : IStateManager) =
