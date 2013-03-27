@@ -1,3 +1,5 @@
+module KosuFSharp.Launcher
+
 open Kosu
 
 [<EntryPoint>]

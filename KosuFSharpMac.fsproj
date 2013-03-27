@@ -14,6 +14,7 @@
         <String>AssemblyInfo.fs</String>
         <String>Helpers.fs</String>
         <String>BrickSprites.fs</String>
+        <String>Tests/BrickSpritesTest.fs</String>
         <String>MyGame.fs</String>
         <String>Launcher.fs</String>
       </BuildOrder>
@@ -48,6 +49,12 @@
       <HintPath>..\Kosu\libs\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="FsUnit.NUnit">
+      <HintPath>libs\FsUnit.NUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>libs\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
@@ -55,6 +62,7 @@
     <Compile Include="Launcher.fs" />
     <Compile Include="MyGame.fs" />
     <Compile Include="BrickSprites.fs" />
+    <Compile Include="Tests\BrickSpritesTest.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
@@ -65,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
+    <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\texmap.png">
