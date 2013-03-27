@@ -14,9 +14,9 @@ type BrickSpritesTest () =
     [<Test>]
     member x.testInitBrickDirs () =
         let brickDirs = initBrickDirs numBricks
-        brickDirs.Length |> should equal numBricks
+        brickDirs |> should haveLength numBricks
        
     [<Test>]
     member x.testInitBrickPositions () =
         let brickPositions = initBrickPositions numBricks
-        brickPositions.Length |> should equal numBricks
+        brickPositions |> should haveLength numBricks
